@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 80d5a78e60cbff14185ebcc332618150, type: 2}
 --- !u!1001 &120375185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ PrefabInstance:
     - target: {fileID: 1715995119601897435, guid: a4a1f686549886245b1f506802e54687,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1715995119601897435, guid: a4a1f686549886245b1f506802e54687,
         type: 3}
@@ -508,7 +508,7 @@ MonoBehaviour:
   sendRate: 30
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 0}
+  transport: {fileID: 586298601}
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
@@ -557,7 +557,7 @@ PrefabInstance:
     - target: {fileID: 1715995119601897435, guid: a4a1f686549886245b1f506802e54687,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1715995119601897435, guid: a4a1f686549886245b1f506802e54687,
         type: 3}
@@ -679,11 +679,11 @@ GameObject:
   - component: {fileID: 853470629}
   - component: {fileID: 853470628}
   m_Layer: 0
-  m_Name: Terrain
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!65 &853470628
 BoxCollider:
@@ -778,7 +778,7 @@ PrefabInstance:
     - target: {fileID: 1715995119601897435, guid: a4a1f686549886245b1f506802e54687,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1715995119601897435, guid: a4a1f686549886245b1f506802e54687,
         type: 3}
@@ -867,9 +867,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1247607918}
+  - {fileID: 671476333}
   - {fileID: 887219238}
   - {fileID: 120375186}
-  - {fileID: 671476333}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
