@@ -26,7 +26,12 @@ public class UnitSelectionHandler : NetworkBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            // Start selection area
+            // Remove previous selection & Start new selection area
+            foreach (Unit selectedUnit in _selectedUnits)
+            {
+                selectedUnit.Deselect();
+            }
+            _selectedUnits.Clear();
         }
         else if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
