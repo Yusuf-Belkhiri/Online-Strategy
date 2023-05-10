@@ -33,6 +33,8 @@ public class UnitMovement : NetworkBehaviour
     private void Update()
     {
         if (!isOwned) return;   // prevent "all clients" from accessing (only allow the client that has authority)    (the same as .hasAuthority)
+        
+        // Movement Input 
         if (!Mouse.current.rightButton.wasPressedThisFrame) return;
 
         Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());      // where we actually clicked in the world

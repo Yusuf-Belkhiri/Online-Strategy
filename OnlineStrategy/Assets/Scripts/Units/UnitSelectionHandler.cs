@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -15,8 +14,8 @@ public class UnitSelectionHandler : NetworkBehaviour
     [SerializeField] private LayerMask _layerMask = new LayerMask();        // Default
     private Camera _mainCamera;
 
-    
-    private List<Unit> _selectedUnits = new ();
+
+    public List<Unit> SelectedUnits { get; } = new();
     private void Start()
     {
         _mainCamera = Camera.main;
@@ -27,11 +26,11 @@ public class UnitSelectionHandler : NetworkBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             // Remove previous selection & Start new selection area
-            foreach (Unit selectedUnit in _selectedUnits)
+            foreach (Unit selectedUnit in SelectedUnits)
             {
                 selectedUnit.Deselect();
             }
-            _selectedUnits.Clear();
+            SelectedUnits.Clear();
         }
         else if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
@@ -49,9 +48,9 @@ public class UnitSelectionHandler : NetworkBehaviour
 
         if (!unit.isOwned)  return;
         
-        _selectedUnits.Add(unit);
+        SelectedUnits.Add(unit);
 
-        foreach (Unit selectedUnit in _selectedUnits)
+        foreach (Unit selectedUnit in SelectedUnits)
         {
             selectedUnit.Select();
         }
