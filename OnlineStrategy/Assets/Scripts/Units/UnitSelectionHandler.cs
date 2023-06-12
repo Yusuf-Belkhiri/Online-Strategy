@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// Manager
@@ -11,11 +10,12 @@ using UnityEngine.Serialization;
 /// </summary>
 public class UnitSelectionHandler : NetworkBehaviour
 {
+    public List<Unit> SelectedUnits { get; } = new();
+
     [SerializeField] private LayerMask _layerMask = new LayerMask();        // Default
     private Camera _mainCamera;
 
 
-    public List<Unit> SelectedUnits { get; } = new();
     private void Start()
     {
         _mainCamera = Camera.main;
@@ -43,9 +43,7 @@ public class UnitSelectionHandler : NetworkBehaviour
         Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _layerMask))  return;
-
         if (!hit.collider.TryGetComponent<Unit>(out Unit unit)) return;
-
         if (!unit.isOwned)  return;
         
         SelectedUnits.Add(unit);

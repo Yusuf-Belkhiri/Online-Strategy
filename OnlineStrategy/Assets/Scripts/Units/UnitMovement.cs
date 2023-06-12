@@ -6,23 +6,22 @@ using UnityEngine.InputSystem;
 public class UnitMovement : NetworkBehaviour
 {
     [SerializeField] private NavMeshAgent _agent = null;
-    private Camera _mainCamera;
-    
+
     #region SERVER
     
     [Command]
-    private void CmdMove(Vector3 position)
+    public void CmdMove(Vector3 position)
     {
         // Check if the destination position is valid 
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) return;      
-
+ 
         _agent.SetDestination(hit.position);
     }
 
     #endregion
 
     
-    #region CLIENT
+    /*#region CLIENT
 
     public override void OnStartAuthority()     // just like Start method, for the person (client) that owns this object
     {
@@ -44,5 +43,5 @@ public class UnitMovement : NetworkBehaviour
         CmdMove(hit.point);     // the impact point in world space where the ray hit the collider
     }
 
-    #endregion
+    #endregion*/
 }

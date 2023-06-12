@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Manager (as UnitSelectionHandler)
+/// </summary>
 public class UnitInput : MonoBehaviour
 {
     [SerializeField] private UnitSelectionHandler _unitSelectionHandler = null;
@@ -26,6 +29,9 @@ public class UnitInput : MonoBehaviour
 
     private void TryMove(Vector3 point)
     {
-        throw new NotImplementedException();
+        foreach (var unit in _unitSelectionHandler.SelectedUnits)
+        {
+            unit.GetUnitMovement().CmdMove(point);
+        }        
     }
 }
