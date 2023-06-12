@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,15 +14,54 @@ public class Unit : NetworkBehaviour
     [SerializeField] private UnitMovement _unitMovement;
     [SerializeField] private UnityEvent _onSelected;
     [SerializeField] private UnityEvent _onDeselected;
-
-
+    
     public UnitMovement GetUnitMovement()
     {
         return _unitMovement;
     }
+
+    // Events: Called on server 
+    public static event Action<Unit> ServerOnUnitSpawned;       
+    public static event Action<Unit> ServerOnUnitDespawned;       // (when unit dies or gets destroyed) 
+
+    // Called on client
+    public static event Action<Unit> AuthorityOnUnitSpawned;    
+    public static event Action<Unit> AuthorityOnUnitDespawned;
+    
+
+
+
+    #region SERVER
+
+    public override void OnStartServer()        // just like Start() (in server/host)
+    {
+        ServerOnUnitSpawned?.Invoke(this);
+    }
+
+    public override void OnStopServer()
+    {
+        ServerOnUnitDespawned?.Invoke(this);
+    }
+    
+    #endregion
+    
     
     #region CLIENT
+    
+    public override void OnStartClient()
+    {
+        if (!isOwned || !isClientOnly) return;      // because in the case of Host, both OnStartServer & OnStartClient will be called  => _myUnits.Add(unit) twice  (check RTSPlayer)
+        AuthorityOnUnitSpawned?.Invoke(this);
+    }
 
+    public override void OnStopClient()
+    {
+        if (!isOwned || !isClientOnly) return;
+        AuthorityOnUnitDespawned?.Invoke(this);
+    }
+    
+    
+    
     [Client]
     public void Select()
     {
