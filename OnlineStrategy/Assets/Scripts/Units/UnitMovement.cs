@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +9,17 @@ public class UnitMovement : NetworkBehaviour
     [SerializeField] private NavMeshAgent _agent = null;
 
     #region SERVER
-    
+
+    // Optimize movement (clear path when reaching stop distance in order to stop pushing other units)
+    [ServerCallback]
+    private void Update()
+    {
+        if (!_agent.hasPath) return;        // to prevent it from clearing the path while calculating it within the same frame
+        if (_agent.remainingDistance > _agent.stoppingDistance) return;
+        
+        _agent.ResetPath();
+    }
+
     [Command]
     public void CmdMove(Vector3 position)
     {

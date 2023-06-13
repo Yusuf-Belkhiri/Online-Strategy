@@ -28,6 +28,8 @@ public class RTSPlayer : NetworkBehaviour
 
     public override void OnStopServer()
     {
+    
+        
         Unit.ServerOnUnitSpawned -= ServerHandleUnitSpawned;
         Unit.ServerOnUnitDespawned -= ServerHandleUnitDespawned;
     }

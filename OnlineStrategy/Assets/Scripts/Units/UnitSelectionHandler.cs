@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Manager
 /// Unit Selection: This can be only a client side script, server doesn't actually need to know which units are selected, because as soon as
-/// we want to move we tell the server to move the selected units 
+/// we want to move we tell the server to move the selected units
 /// </summary>
 public class UnitSelectionHandler : NetworkBehaviour
 {
@@ -16,7 +16,7 @@ public class UnitSelectionHandler : NetworkBehaviour
     [SerializeField] private LayerMask _layerMask = new LayerMask();        // Default
     private Camera _mainCamera;
 
-    [SerializeField] private RectTransform _unitsSelectionArea;
+    [SerializeField] private RectTransform _unitsSelectionArea;        // DragBox (UI)
     private RTSPlayer _player;      // reference to the RTSPlayer 
     private Vector2 _startDragPos;
     
@@ -45,31 +45,42 @@ public class UnitSelectionHandler : NetworkBehaviour
 
     private void StartSelectionArea()
     {
-        // Remove previous selection & Start new selection area
-        foreach (Unit selectedUnit in SelectedUnits)
+        if (!Keyboard.current.shiftKey.isPressed)
         {
-            selectedUnit.Deselect();
+            // Remove previous selection & Start new selection area
+            foreach (Unit selectedUnit in SelectedUnits)
+            {
+                selectedUnit.Deselect();
+            }
+            SelectedUnits.Clear();   
         }
-        SelectedUnits.Clear();
-        
+
         _unitsSelectionArea.gameObject.SetActive(true);
         _startDragPos = Mouse.current.position.ReadValue();
         UpdateSelectionArea();
     }
+
+    /// <summary>
+    /// Draw the unitSelectionArea box
+    /// </summary>
     private void UpdateSelectionArea()
     {
         Vector2 mousePos = Mouse.current.position.ReadValue();
 
         //float areaWidth = mousePos.x - _startDragPos.x;
         Vector2 areaSize = mousePos - _startDragPos;
-        _unitsSelectionArea.sizeDelta = areaSize.Abs();
+        _unitsSelectionArea.sizeDelta = new Vector2(Mathf.Abs(areaSize.x), Mathf.Abs(areaSize.y));
         _unitsSelectionArea.anchoredPosition = _startDragPos + areaSize / 2;
     }
 
+    /// <summary>
+    /// Select & Deselect (Result)
+    /// </summary>
     private void ClearSelectionArea()
     {
         _unitsSelectionArea.gameObject.SetActive(false);
 
+        // Case: select only one unit (without dragging)
         if (_unitsSelectionArea.sizeDelta.magnitude == 0)
         {
             Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -88,11 +99,13 @@ public class UnitSelectionHandler : NetworkBehaviour
             return;
         }
         
-        // Check for units inside the unitsSelectionArea (pos > minPos(bottom left) & pos < maxPos(upper right)) 
+        // Dragging: Check for units inside the unitsSelectionArea (pos > minPos(bottom left) & pos < maxPos(upper right)) 
         Vector2 minPos = _unitsSelectionArea.anchoredPosition - _unitsSelectionArea.sizeDelta / 2;
         Vector2 maxPos = _unitsSelectionArea.anchoredPosition + _unitsSelectionArea.sizeDelta / 2;
         foreach (var unit in _player.GetMyUnits())
         {
+            if (SelectedUnits.Contains(unit))       // To avoid selecting an already selected unit
+                continue;
             Vector3 unitScreenPos = _mainCamera.WorldToScreenPoint(unit.transform.position);
             if (unitScreenPos.x > minPos.x && 
                 unitScreenPos.y > minPos.y && 
