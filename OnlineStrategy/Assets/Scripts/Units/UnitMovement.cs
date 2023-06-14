@@ -8,6 +8,8 @@ public class UnitMovement : NetworkBehaviour
 {
     [SerializeField] private NavMeshAgent _agent = null;
 
+    [SerializeField] private Targeter _targeter;
+    
     #region SERVER
 
     // Optimize movement (clear path when reaching stop distance in order to stop pushing other units)
@@ -23,6 +25,8 @@ public class UnitMovement : NetworkBehaviour
     [Command]
     public void CmdMove(Vector3 position)
     {
+        _targeter.ClearTarget();
+
         // Check if the destination position is valid 
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) return;      
  
