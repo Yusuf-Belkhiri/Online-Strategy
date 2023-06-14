@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &499110139552102017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1350114345029791550}
+  m_Layer: 0
+  m_Name: AimAtPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1350114345029791550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499110139552102017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5548579814934917174}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4485910555710134383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5172785183942508141}
+  m_Layer: 0
+  m_Name: ProjectileSpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5172785183942508141
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485910555710134383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.61, z: 2.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5548579814934917174}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5548579814934917175
 GameObject:
   m_ObjectHideFlags: 0
@@ -17,6 +79,7 @@ GameObject:
   - component: {fileID: 9033668456512987623}
   - component: {fileID: 4428386275647931183}
   - component: {fileID: 1297457722596444043}
+  - component: {fileID: -6391603099645066480}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -38,6 +101,8 @@ Transform:
   m_Children:
   - {fileID: 5371169881081834739}
   - {fileID: 6018786979084204148}
+  - {fileID: 5172785183942508141}
+  - {fileID: 1350114345029791550}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -142,6 +207,7 @@ MonoBehaviour:
   syncInterval: 0
   _agent: {fileID: 3569703038173997538}
   _targeter: {fileID: 1297457722596444043}
+  _chaseRange: 10
 --- !u!114 &9033668456512987623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +270,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _aimAtPos: {fileID: 5548579814934917174}
+  _aimAtPos: {fileID: 1350114345029791550}
 --- !u!114 &1297457722596444043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,7 +286,28 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _target: {fileID: 0}
+--- !u!114 &-6391603099645066480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5548579814934917175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b32fc434bd7bb44098efd862a6b56c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  _targeter: {fileID: 1297457722596444043}
+  _projectilePrefab: {fileID: 5661878550412091424, guid: 5157b3a2414d3384ca100f991bb37c0b,
+    type: 3}
+  _projectileSpawnPos: {fileID: 5172785183942508141}
+  _fireRange: 11
+  _rotationSpeed: 180
+  _fireRate: 1
 --- !u!1 &7872363124211877514
 GameObject:
   m_ObjectHideFlags: 0

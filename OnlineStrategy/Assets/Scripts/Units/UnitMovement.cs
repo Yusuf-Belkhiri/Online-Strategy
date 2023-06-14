@@ -9,7 +9,8 @@ public class UnitMovement : NetworkBehaviour
     [SerializeField] private Targeter _targeter;
 
     [SerializeField] private float _chaseRange = 10f;
-    [SerializeField] private float _attackRange = 11f;      // slightly higher than the chase range
+    //[SerializeField] private float _attackRange = 11f;      // slightly higher than the chase range
+    
     #region SERVER
 
     // Optimize movement (clear path when reaching stop distance in order to stop pushing other units)
@@ -20,13 +21,13 @@ public class UnitMovement : NetworkBehaviour
         // Chasing movement
         if (target != null)
         {
-            var sqrDistanceToTarget = (target.transform.position - transform.position).sqrMagnitude;
+            //var sqrDistanceToTarget = (target.transform.position - transform.position).sqrMagnitude;
             
-            if (sqrDistanceToTarget < _attackRange * _attackRange)
-            {
-                print("Shoot");
-            }
-            if (sqrDistanceToTarget > _chaseRange * _chaseRange)       // the same as (Vector3.Distance(transform.position, target.transform.position)) ^ 2 > _chaseRange ^ 2 (more efficient than sqr root (Vector3.Distance uses sqr root)
+            // if (sqrDistanceToTarget < _attackRange * _attackRange)
+            // {
+            //     print("Shoot");
+            // }
+            if ((target.transform.position - transform.position).sqrMagnitude > _chaseRange * _chaseRange)       // the same as (Vector3.Distance(transform.position, target.transform.position)) ^ 2 > _chaseRange ^ 2 (more efficient than sqr root (Vector3.Distance uses sqr root)
             {
                 // chase
                 _agent.SetDestination(target.transform.position);
