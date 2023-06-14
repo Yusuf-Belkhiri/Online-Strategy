@@ -26,7 +26,7 @@ public class UnitInput : MonoBehaviour
 
         if (hit.collider.TryGetComponent<Targetable>(out Targetable target))
         {
-            if (target.isOwned)
+            if (target.isOwned)     // can be replaced & removed ig
             {
                 TryMove(hit.point);
                 return;

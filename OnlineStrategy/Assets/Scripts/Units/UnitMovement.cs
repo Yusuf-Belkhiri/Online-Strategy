@@ -1,21 +1,46 @@
-using System;
 using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem;
 
 public class UnitMovement : NetworkBehaviour
 {
     [SerializeField] private NavMeshAgent _agent = null;
 
     [SerializeField] private Targeter _targeter;
-    
+
+    [SerializeField] private float _chaseRange = 10f;
+    [SerializeField] private float _attackRange = 11f;      // slightly higher than the chase range
     #region SERVER
 
     // Optimize movement (clear path when reaching stop distance in order to stop pushing other units)
     [ServerCallback]
     private void Update()
     {
+        Targetable target = _targeter.GetTarget();
+        // Chasing movement
+        if (target != null)
+        {
+            var sqrDistanceToTarget = (target.transform.position - transform.position).sqrMagnitude;
+            
+            if (sqrDistanceToTarget < _attackRange * _attackRange)
+            {
+                print("Shoot");
+            }
+            if (sqrDistanceToTarget > _chaseRange * _chaseRange)       // the same as (Vector3.Distance(transform.position, target.transform.position)) ^ 2 > _chaseRange ^ 2 (more efficient than sqr root (Vector3.Distance uses sqr root)
+            {
+                // chase
+                _agent.SetDestination(target.transform.position);
+            }
+            else if (_agent.hasPath)
+            {
+                // stop chasing
+                _agent.ResetPath();
+            }
+            
+            return;
+        }
+        
+        // Normal movement (no target)
         if (!_agent.hasPath) return;        // to prevent it from clearing the path while calculating it within the same frame
         if (_agent.remainingDistance > _agent.stoppingDistance) return;
         

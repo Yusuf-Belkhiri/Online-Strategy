@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class Targeter : NetworkBehaviour
 {
-    // remove SF
-    [SerializeField] private Targetable _target;
+    private Targetable _target;
 
+    public Targetable GetTarget()
+    {
+        return _target;
+    }
 
     #region SERVER
 
