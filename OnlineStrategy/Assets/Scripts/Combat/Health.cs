@@ -6,9 +6,11 @@ public class Health : NetworkBehaviour
 {
     [SerializeField] private int _maxHealth = 100;
 
-    [SyncVar] private int _currentHealth;       // Only the server can manipulate it
+    [SyncVar(hook = nameof(HandleHealthUpdated))] private int _currentHealth;       // Only the server can manipulate it
 
     public event Action ServerOnDie;
+
+    public event Action<int, int> ClientOnHealthUpdated;       // <currentHealth, maxHealth> 
 
     #region SERVER
 
@@ -35,5 +37,10 @@ public class Health : NetworkBehaviour
 
     #region CLIENT
 
+    // Sync hook of currentHealth 
+    private void HandleHealthUpdated(int oldHealth, int newHealth)
+    {
+        ClientOnHealthUpdated?.Invoke(newHealth, _maxHealth);
+    }
     #endregion
 }
