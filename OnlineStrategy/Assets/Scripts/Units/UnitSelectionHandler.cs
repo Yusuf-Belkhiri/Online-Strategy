@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mirror;
 using Unity.VisualScripting;
@@ -25,7 +26,15 @@ public class UnitSelectionHandler : NetworkBehaviour
     {
         _mainCamera = Camera.main;
         _player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+
+        Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
     }
+
+    private void OnDestroy()
+    {
+        Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
+    }
+    
 
     private void Update()
     {
@@ -116,5 +125,11 @@ public class UnitSelectionHandler : NetworkBehaviour
                 unit.Select();
             }
         }
+    }
+    
+    // Deselect the unit when destroyed (for both client & host)
+    private void AuthorityHandleUnitDespawned(Unit unit)
+    {
+        SelectedUnits.Remove(unit);
     }
 }

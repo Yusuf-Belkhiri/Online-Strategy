@@ -36,32 +36,47 @@ public class Unit : NetworkBehaviour
     }
 
 
+    [SerializeField] private Health _health;
+    
     #region SERVER
 
     public override void OnStartServer()        // just like Start() (in server/host)
     {
         ServerOnUnitSpawned?.Invoke(this);
+        _health.ServerOnDie += ServerHandleOnDie;
     }
 
     public override void OnStopServer()
     {
         ServerOnUnitDespawned?.Invoke(this);
+        _health.ServerOnDie -= ServerHandleOnDie;
     }
-    
+
+
+    [Server]
+    private void ServerHandleOnDie()
+    {
+        NetworkServer.Destroy(gameObject);
+    }
     #endregion
     
     
     #region CLIENT
     
-    public override void OnStartClient()
+    // OnStartClient & isOwned are replaced with OnStartAuthority because we want to raise AuthorityOnUnitSpawned in both clients & host
+    // public override void OnStartClient()
+    // {
+    //     if (!isOwned) return;      // if (!isOwned || !isClientOnly) return; because in the case of Host, both OnStartServer & OnStartClient will be called  => _myUnits.Add(unit) twice  (check RTSPlayer)
+    //     AuthorityOnUnitSpawned?.Invoke(this);
+    // }
+    public override void OnStartAuthority()
     {
-        if (!isOwned || !isClientOnly) return;      // because in the case of Host, both OnStartServer & OnStartClient will be called  => _myUnits.Add(unit) twice  (check RTSPlayer)
-        AuthorityOnUnitSpawned?.Invoke(this);
+        AuthorityOnUnitSpawned?.Invoke(this);   // isClientOnly is removed after the addition of AuthorityHandleUnitDespawned in UnitSelectionHandler
     }
 
-    public override void OnStopClient()
+    public override void OnStopClient()     // unlike OnStartClient with isOwned was replaced with OnStartAuthority, OnStopClient can't be replaced by OnStopAuthority (because this one can be called by just loosing the auth (not necessary being destroyed))
     {
-        if (!isOwned || !isClientOnly) return;
+        if (!isOwned) return;      // if (!isOwned || !isClientOnly) return;
         AuthorityOnUnitDespawned?.Invoke(this);
     }
     

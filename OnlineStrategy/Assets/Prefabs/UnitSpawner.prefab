@@ -171,6 +171,7 @@ MonoBehaviour:
   _unitPrefab: {fileID: 5548579814934917175, guid: b6f21d3a2ed1db745b1144fbda7be0ec,
     type: 3}
   _unitSpawnPos: {fileID: 7174715972656914539}
+  _health: {fileID: 7332847644452685329}
 --- !u!114 &8700487009285787423
 MonoBehaviour:
   m_ObjectHideFlags: 0

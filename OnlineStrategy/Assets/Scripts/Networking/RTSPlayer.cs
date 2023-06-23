@@ -54,18 +54,20 @@ public class RTSPlayer : NetworkBehaviour
 
     #region CLIENT
 
-    public override void OnStartClient()
+    public override void OnStartAuthority()        // Changed from OnStartClient
     {
-        if (!isClientOnly) return;      // because in the case of Host, both OnStartServer & OnStartClient will be called => _myUnits.Add(unit) twice
-
+        //if (!isClientOnly) return;      // because in the case of Host, both OnStartServer & OnStartClient will be called => _myUnits.Add(unit) twice
+        if (NetworkServer.active) return;
+        
         Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
     }
     
     public override void OnStopClient()
     {
-        if (!isClientOnly) return;      
-
+        //if (!isClientOnly) return;      
+        if (!isClientOnly || !isOwned) return;
+        
         Unit.AuthorityOnUnitSpawned -= AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
     }
@@ -73,13 +75,13 @@ public class RTSPlayer : NetworkBehaviour
     
     private void AuthorityHandleUnitSpawned(Unit unit)
     {
-        if (!isOwned) return;           
+        //if (!isOwned) return;           
         _myUnits.Add(unit);
     }
 
     private void AuthorityHandleUnitDespawned(Unit unit)
     {
-        if (!isOwned) return;
+        //if (!isOwned) return;
         _myUnits.Remove(unit);
     }
 
